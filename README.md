@@ -1,19 +1,31 @@
-# web
+# Faucet Webpage
 
-This template should help get you started developing with Vue 3 in Vite.
+A simple webpage for Goerli Testnet's faucet.
 
-## Recommended IDE Setup
+It's HW1 for 1112 NCNU CSIE "Principles and Practice of Blockchains"
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+link to Metamask and create a transaction to the smart contract to get GoerliETH.
 
-## Customize configuration
+![](docs/Screenshot_20230226_025506.png)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
 ```sh
 npm install
+```
+
+### fill in your smart contract's address
+
+```javascript
+// /src/views/FaucetView.vue line 46
+    const transactionParameters = {
+        from: ethereum.selectedAddress,
+        to: '',               // smart contract's address
+        data: encodeFunctionCall,
+        value: '0x00',
+    }
+
 ```
 
 ### Compile and Hot-Reload for Development
@@ -27,3 +39,11 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## Notice
+
+Now, I am not sure of difference between `window.ethereum` & `web3`
+
+I use `window.ethereum` to send transaction, check accounts, check network and use `web3` to encode ABI.
+
+I am not sure whether it's a suitable implementation
