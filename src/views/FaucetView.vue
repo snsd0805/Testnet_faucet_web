@@ -1,5 +1,6 @@
 <script>
 import detectEthereumProvider from '@metamask/detect-provider'
+import Web3 from 'web3';
 
 export default {
   name: 'MyComponent',
@@ -29,21 +30,31 @@ export default {
       }
     },
 
-    withdraw() {
+    async withdraw() {
+      const web3 = new Web3()
       const encodeFunctionCall = web3.eth.abi.encodeFunctionCall({
         name: "withdraw",
         type: "function",
         inputs: [{
-          type: "unit256",
+          type: "uint256",
           name: "amount"
-        }, [95000000000000000]]
-      }, [123])
+        }]
+      }, [web3.utils.toBN(this.amount)])
       const transactionParameters = {
         from: ethereum.selectedAddress,
         to: '0x629fe41fd008a169fc073ac7a016401dfd7f17d9',
-        data: encodeFunctionCall
+        data: encodeFunctionCall,
+        value: '0x00',
       }
       console.log(encodeFunctionCall)
+      console.log(transactionParameters)
+
+      const txHash = await ethereum.request({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters]
+      })
+
+      print(txHash)
     }
   }
 }
@@ -74,11 +85,11 @@ export default {
                     <div class="row">
                       <div class="col-sm">
                         <form>
-                          <input type='number' class="form-control" v-model="amount" >
+                          <input type='text' class="form-control" v-model="amount" >
                         </form>
                       </div>
                       <div class="col-sm">
-                        <button class='btn btn-info' v-on:click="withdraw"> withdraw ETH ({{amount}} wei) </button>
+                        <button class='btn btn-info' v-on:click="withdraw"> withdraw ETH ({{amount}} wei = {{Number(BigInt(amount))/10**18}} ETH) </button>
                       </div>
                     </div>
                   </div>                    
