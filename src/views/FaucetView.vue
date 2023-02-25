@@ -8,7 +8,8 @@ export default {
     return {
       msg: '',
       linked: false,
-      amount: 100000000
+      amount: 100000000,
+      logs: []
     }
   },
   methods: {
@@ -42,7 +43,7 @@ export default {
       }, [web3.utils.toBN(this.amount)])
       const transactionParameters = {
         from: ethereum.selectedAddress,
-        to: '0x629fe41fd008a169fc073ac7a016401dfd7f17d9',
+        to: '',               // smart contract's address
         data: encodeFunctionCall,
         value: '0x00',
       }
@@ -54,7 +55,14 @@ export default {
         params: [transactionParameters]
       })
 
-      print(txHash)
+      console.log(txHash)
+
+      var amountToSave = this.amount
+      this.logs.push({
+        amount: amountToSave,
+        address: ethereum.selectedAddress,
+        tx: txHash
+      })
     }
   }
 }
@@ -96,6 +104,28 @@ export default {
                 </div>
               </template>
           </div>
+
+          <br><br>
+          <hr>
+          <br><br>
+
+          <template v-if="this.logs.length != 0">
+            <div class="row justify-content-center">
+              <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Your Withdraw</h2>
+              <table class="table">
+                <thead>
+                  <td> amount (ETH)</td>
+                  <td> transaction hash </td>
+                  <td> check </td>
+                </thead>
+                <tr v-for="log in logs">
+                  <td> {{ Number(BigInt(log.amount))/10**18 }} ETH</td>
+                  <td> {{ log.tx }} </td>
+                  <td> <a v-bind:href='"https://goerli.etherscan.io/tx/"+log.tx'>EtherScan</a> </td>
+                </tr>
+              </table>
+            </div>
+          </template>
       </div>
   </section>
 </template>
