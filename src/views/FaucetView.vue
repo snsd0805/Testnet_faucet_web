@@ -1,3 +1,55 @@
+<script>
+import detectEthereumProvider from '@metamask/detect-provider'
+
+export default {
+  name: 'MyComponent',
+  data() {
+    return {
+      msg: '',
+      linked: false,
+      amount: 100000000
+    }
+  },
+  methods: {
+    async detectMetamask() {
+      this.msg = "Detecting..."
+      const provider = await detectEthereumProvider()
+      if (provider) {
+        this.msg = "Detect Metamask. "
+        const chainId = await ethereum.request({method: 'eth_chainId'})
+        if(chainId == 0x5){
+          const account = await ethereum.request({ method: 'eth_requestAccounts' });
+          this.msg += "> Network which you connected is Goerli. @ " + account[0]
+          this.linked = true
+        }else{
+          this.msg += "> But the network which you connected isn't Goerli, this faucet only accept Goerli address"
+        }
+      } else {
+        this.msg = "ERROR: no Metamask"
+      }
+    },
+
+    withdraw() {
+      const encodeFunctionCall = web3.eth.abi.encodeFunctionCall({
+        name: "withdraw",
+        type: "function",
+        inputs: [{
+          type: "unit256",
+          name: "amount"
+        }, [95000000000000000]]
+      }, [123])
+      const transactionParameters = {
+        from: ethereum.selectedAddress,
+        to: '0x629fe41fd008a169fc073ac7a016401dfd7f17d9',
+        data: encodeFunctionCall
+      }
+      console.log(encodeFunctionCall)
+    }
+  }
+}
+</script>
+
+
 <template>
   <section class="page-section portfolio" id="portfolio">
       <div class="container">
@@ -12,15 +64,27 @@
 
           <!-- Portfolio Grid Items-->
           <div class="row justify-content-center">
-              <button class='btn btn-primary'> Test </button>
+              <p>{{ msg }}</p>
+              <template v-if='!linked'>
+                  <button class='btn btn-info' v-on:click="detectMetamask"> link to Metamask </button>
+              </template>
+              <template v-else>
+                <div>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-sm">
+                        <form>
+                          <input type='number' class="form-control" v-model="amount" >
+                        </form>
+                      </div>
+                      <div class="col-sm">
+                        <button class='btn btn-info' v-on:click="withdraw"> withdraw ETH ({{amount}} wei) </button>
+                      </div>
+                    </div>
+                  </div>                    
+                </div>
+              </template>
           </div>
       </div>
   </section>
 </template>
-
-<script>
-
-export default {
-  name: 'MyComponent',
-}
-</script>
