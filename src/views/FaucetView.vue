@@ -8,7 +8,7 @@ export default {
     return {
       msg: '',
       linked: false,
-      amount: 100000000,
+      amount: 10000000000000000,
       logs: []
     }
   },
@@ -19,12 +19,12 @@ export default {
       if (provider) {
         this.msg = "Detect Metamask. "
         const chainId = await ethereum.request({method: 'eth_chainId'})
-        if(chainId == 0x5){
+        if(chainId == 11155111){
           const account = await ethereum.request({ method: 'eth_requestAccounts' });
-          this.msg += "> Network which you connected is Goerli. @ " + account[0]
+          this.msg += "> Network which you connected is Sepolia. @ " + account[0]
           this.linked = true
         }else{
-          this.msg += "> But the network which you connected isn't Goerli, this faucet only accept Goerli address"
+          this.msg += "> But the network which you connected isn't Sepolia, this faucet only accept Sepolia address"
         }
       } else {
         this.msg = "ERROR: no Metamask"
@@ -73,7 +73,7 @@ export default {
   <section class="page-section portfolio" id="portfolio">
       <div class="container">
           <!-- Portfolio Section Heading-->
-          <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">My Goerli Faucet</h2>
+          <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">My Sepolia Faucet</h2>
           <!-- Icon Divider-->
           <div class="divider-custom">
               <div class="divider-custom-line"></div>
@@ -121,7 +121,7 @@ export default {
                 <tr v-for="log in logs">
                   <td> {{ Number(BigInt(log.amount))/10**18 }} ETH</td>
                   <td> {{ log.tx }} </td>
-                  <td> <a v-bind:href='"https://goerli.etherscan.io/tx/"+log.tx'>EtherScan</a> </td>
+                  <td> <a v-bind:href='"https://sepolia.etherscan.io/tx/"+log.tx'>EtherScan</a> </td>
                 </tr>
               </table>
             </div>

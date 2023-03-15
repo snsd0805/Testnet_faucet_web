@@ -1,10 +1,10 @@
 # Faucet Webpage
 
-A simple webpage for Goerli Testnet's faucet.
+A simple webpage for Sepolia Testnet's faucet.
 
 It's HW1 for 1112 NCNU CSIE "Principles and Practice of Blockchains"
 
-link to Metamask and create a transaction to the smart contract to get GoerliETH.
+link to Metamask and create a transaction to the smart contract to get SepoliaETH.
 
 ![](docs/Screenshot_20230226_025506.png)
 
